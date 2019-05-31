@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.nandandesai'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation 'org.tinylog:tinylog:1.3.6'
+}
