@@ -1,5 +1,6 @@
 package io.github.nandandesai;
 
+import io.github.nandandesai.models.Tweet;
 import io.github.nandandesai.models.UserSearchResult;
 import io.github.nandandesai.models.Profile;
 import org.jsoup.Connection;
@@ -57,6 +58,11 @@ public class TwitterScraper {
     public List<UserSearchResult> searchUser(String query) throws IOException {
         SearchScraper searchScraper= new SearchScraper();
         return searchScraper.searchUser(query, cookies);
+    }
+
+    public List<Tweet> getUserTimeline(String username) throws IOException {
+        TweetScraper tweetScraper=new TweetScraper();
+        return tweetScraper.getHomeTimeline(username, cookies);
     }
 
     //returns HTTP headers
