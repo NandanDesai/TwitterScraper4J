@@ -24,7 +24,7 @@ class SearchScraper {
             return null;
         }
 
-        //even though I'm using URLEncoder, it replaces spaces with '+' instead of "%20" which can be problematic for Twitter.
+        //even though I'm using URLEncoder later on in this code, it replaces spaces with '+' instead of "%20" which can be problematic for Twitter.
         //So, before formally encoding the URL, I'm replacing all spaces with "%20" manually and then giving that to the URLEncoder
         //Also, URLEncoder will later replace '%' sign with "%25". So, the resulting URL query will have %2520 instead of %20 for a space character.
         //But that is what Twitter was expecting while I tested it.

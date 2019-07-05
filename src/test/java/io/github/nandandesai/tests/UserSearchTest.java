@@ -9,11 +9,13 @@ import java.util.List;
 public class UserSearchTest {
 
     public static void main(String[] args){
-        testPeopleSearch("CIA");
+        testUserSearch("CIA");
+        testUserSearch("Ryan Higa");
+        testUserSearch("Chowkidar");
     }
 
 
-    private static void testPeopleSearch(String query){
+    private static void testUserSearch(String query){
         try {
             TwitterScraper scraper = TwitterScraper.getInstance();
             List<UserSearchResult> userSearchResults =scraper.searchUser(query);
