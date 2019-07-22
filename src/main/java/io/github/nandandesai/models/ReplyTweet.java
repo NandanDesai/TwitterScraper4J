@@ -2,21 +2,18 @@ package io.github.nandandesai.models;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReplyTweet extends Tweet {
-    private String repliedToTweetID; //the tweet ID of the tweet to which the replytweet is being made
-    private ArrayList<String> repliedTo=new ArrayList<>();
+    private List<Tweet> upperThread; //the series of tweets that appear above the present tweet in the thread.
+                                     //This means that even if there are tweets below this tweet in the same thread, they are not considered here.
 
-    public ReplyTweet(String tweetID, String authorUsername, String tweetText, String timestamp, ArrayList<Media> media, ArrayList<String> mentions, ArrayList<String> hashtags, ArrayList<URL> urls, ArrayList<String> repliedTo) {
+    public ReplyTweet(String tweetID, String authorUsername, String tweetText, String timestamp, ArrayList<Media> media, ArrayList<String> mentions, ArrayList<String> hashtags, ArrayList<URL> urls, List<Tweet> upperThread) {
         super(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls);
-        this.repliedTo=repliedTo;
+        this.upperThread=upperThread;
     }
 
-    public String getRepliedToTweetID() {
-        return repliedToTweetID;
-    }
-
-    public ArrayList<String> getRepliedTo() {
-        return repliedTo;
+    public List<Tweet> getUpperThread() {
+        return upperThread;
     }
 }

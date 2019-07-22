@@ -24,12 +24,7 @@ class TweetScraper {
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username;
         Logger.info("Fetching the profile using : "+url);
-        Connection.Response response = Jsoup.connect(url).headers(TwitterScraper.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
-                .method(Connection.Method.POST)
-                .header("Referer","https://mobile.twitter.com/")
-                .cookies(cookies)
-                .execute();
-        Document doc = response.parse();
+        Document doc = Utils.getDocument(url,cookies);
 
         String tweetID="";
         String authorUsername="";
@@ -42,6 +37,7 @@ class TweetScraper {
 
         /*
         * TODO: find if it is a tweet or a retweet or reply
+        *
         * */
 
         Elements tweetTables=doc.getElementsByClass("tweet  ");
@@ -84,10 +80,35 @@ class TweetScraper {
             timestamp=timestampTd.text();
             System.out.println("Timestamp: "+timestamp);
 
+            boolean isRetweet=!tweetTable.getElementsByClass("tweet-social-context").isEmpty();
+            System.out.println("is Retweet: "+isRetweet);
+
+            if(isRetweet){
+                String retweetedBy=username;
+                String comment="";
+
+                //create the Retweet object here
+            }
+
+
+            boolean isReply=!tweetTable.getElementsByClass("tweet-reply-context username").isEmpty();
+            System.out.println("is Reply: "+isReply);
+
+            if(isReply){
+
+            }
+
             System.out.println();
             System.out.println();
         }
 
         return null;
+    }
+
+    List<Tweet> getUpperThread(String username, String tweetId){
+        ArrayList<Tweet> upperThread=new ArrayList<>();
+
+
+        return upperThread;
     }
 }
