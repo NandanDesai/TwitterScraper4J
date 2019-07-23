@@ -1,9 +1,9 @@
 package io.github.nandandesai;
 
 import io.github.nandandesai.models.Media;
+import io.github.nandandesai.models.ReplyTweet;
+import io.github.nandandesai.models.Retweet;
 import io.github.nandandesai.models.Tweet;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,98 +17,148 @@ import java.util.Map;
 
 class TweetScraper {
 
-    List<Tweet> getHomeTimeline(String username, Map<String, String> cookies) throws IOException {
-        if(username == null || username.equals("") || cookies == null){
+    private Map<String, String> cookies;
+
+    public TweetScraper(Map<String, String> cookies) {
+        this.cookies = cookies;
+    }
+
+    List<Tweet> getHomeTimeline(String username) throws IOException {
+        if (username == null || username.equals("") || cookies == null) {
             Logger.error(new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty"));
             return null;
         }
-        String url="https://mobile.twitter.com/i/nojs_router?path=/"+username;
-        Logger.info("Fetching the profile using : "+url);
-        Document doc = Utils.getDocument(url,cookies);
+        String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username;
+        Logger.info("Fetching the profile using : " + url);
+        Document doc = Utils.getDocument(url, cookies);
 
-        String tweetID="";
-        String authorUsername="";
-        String tweetText="";
-        String timestamp="";
-        ArrayList<Media> media=new ArrayList<>();
-        ArrayList<String> mentions=new ArrayList<>();
-        ArrayList<String> hashtags=new ArrayList<>();
-        ArrayList<URL> urls=new ArrayList<>();
 
-        /*
-        * TODO: find if it is a tweet or a retweet or reply
-        *
-        * */
 
-        Elements tweetTables=doc.getElementsByClass("tweet  ");
-        System.out.println();
-        for(Element tweetTable : tweetTables){
-            Element tweetTextDiv=tweetTable.getElementsByClass("tweet-text").first();
-            tweetText=tweetTextDiv.text();
-            System.out.println("Tweet Text : "+tweetText);
-            tweetID=tweetTextDiv.attr("data-id");
-            System.out.println("Tweet Id: "+tweetID);
-            Elements linksAndHashtags=tweetTextDiv.getElementsByTag("a");
+        List<Tweet> tweets=new ArrayList<>();
 
-            if(linksAndHashtags!=null) {
+        Elements tweetTables = doc.getElementsByClass("tweet  ");
+        for (Element tweetTable : tweetTables) {
+            String tweetID = "";
+            String authorUsername = "";
+            String tweetText = "";
+            String timestamp = "";
+            ArrayList<Media> media = new ArrayList<>();
+            ArrayList<String> mentions = new ArrayList<>();
+            ArrayList<String> hashtags = new ArrayList<>();
+            ArrayList<URL> urls = new ArrayList<>();
+
+            Element tweetTextDiv = tweetTable.getElementsByClass("tweet-text").first();
+            tweetText = tweetTextDiv.text();
+            tweetID = tweetTextDiv.attr("data-id");
+            Elements linksAndHashtags = tweetTextDiv.getElementsByTag("a");
+
+            if (linksAndHashtags != null) {
                 for (Element anchorTag : linksAndHashtags) {
-                    Elements urlInTweet=anchorTag.getElementsByClass("twitter_external_link dir-ltr tco-link");
-                    if(!urlInTweet.isEmpty()){
-                        System.out.println("URL in Tweet: "+urlInTweet.attr("data-url"));
+                    Elements urlInTweet = anchorTag.getElementsByClass("twitter_external_link dir-ltr tco-link");
+                    if (!urlInTweet.isEmpty()) {
                         urls.add(new URL(urlInTweet.attr("data-url")));
                     }
 
-                    Elements hashtagInTweet=anchorTag.getElementsByClass("twitter-hashtag dir-ltr");
-                    if(!hashtagInTweet.isEmpty()){
-                        System.out.println("Hashtag in Tweet: "+hashtagInTweet.text());
+                    Elements hashtagInTweet = anchorTag.getElementsByClass("twitter-hashtag dir-ltr");
+                    if (!hashtagInTweet.isEmpty()) {
                         hashtags.add(hashtagInTweet.text());
                     }
 
-                    Elements mentionsInTweet=anchorTag.getElementsByClass("twitter-atreply dir-ltr");
-                    if(!mentionsInTweet.isEmpty()){
-                        System.out.println("Mention in Tweet: "+mentionsInTweet.text());
+                    Elements mentionsInTweet = anchorTag.getElementsByClass("twitter-atreply dir-ltr");
+                    if (!mentionsInTweet.isEmpty()) {
                         mentions.add(mentionsInTweet.text());
                     }
                 }
             }
 
-            Element usernameDiv=tweetTable.getElementsByClass("username").first();
-            authorUsername=usernameDiv.text();
-            System.out.println("Author Username: "+authorUsername);
+            Element usernameDiv = tweetTable.getElementsByClass("username").first();
+            authorUsername = usernameDiv.text();
 
-            Element timestampTd=tweetTable.getElementsByClass("timestamp").first();
-            timestamp=timestampTd.text();
-            System.out.println("Timestamp: "+timestamp);
+            Element timestampTd = tweetTable.getElementsByClass("timestamp").first();
+            timestamp = timestampTd.text();
 
-            boolean isRetweet=!tweetTable.getElementsByClass("tweet-social-context").isEmpty();
-            System.out.println("is Retweet: "+isRetweet);
 
-            if(isRetweet){
-                String retweetedBy=username;
-                String comment="";
+            //this works for non-commented retweets only
+            //TODO: complete Retweet stuff for 'retweet with comment'
+            boolean isRetweet = !tweetTable.getElementsByClass("tweet-social-context").isEmpty();
 
-                //create the Retweet object here
+            boolean isReply = !tweetTable.getElementsByClass("tweet-reply-context username").isEmpty();
+
+            if (isRetweet) {
+                String retweetedBy = username;
+                String comment = ""; //complete this
+
+                tweets.add(new Retweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, retweetedBy, comment));
+
+            }else if (isReply) {
+
+                //TODO: the below line takes a lot of time while executing. Do something about it.
+                //List<Tweet> upperThread=getUpperThread(username, tweetID);
+                List<Tweet> upperThread=null;
+                tweets.add(new ReplyTweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, upperThread));
+
+            }else{
+
+                tweets.add(new Tweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls));
+
             }
-
-
-            boolean isReply=!tweetTable.getElementsByClass("tweet-reply-context username").isEmpty();
-            System.out.println("is Reply: "+isReply);
-
-            if(isReply){
-
-            }
-
-            System.out.println();
-            System.out.println();
         }
 
-        return null;
+        return tweets;
     }
 
-    List<Tweet> getUpperThread(String username, String tweetId){
-        ArrayList<Tweet> upperThread=new ArrayList<>();
+    private List<Tweet> getUpperThread(String username, String tweetId) throws IOException {
+        ArrayList<Tweet> upperThread = new ArrayList<>();
+        String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username + "/status/" + tweetId;
+        Document doc = Utils.getDocument(url, cookies);
 
 
+        Element inReplyTos = doc.getElementsByClass("timeline inreplytos").first();
+        Elements tweetTables = inReplyTos.getElementsByClass("tweet  ");
+        for (Element tweetTable : tweetTables) {
+            String tweetID = "";
+            String authorUsername = "";
+            String tweetText = "";
+            String timestamp = "";
+            ArrayList<Media> media = new ArrayList<>();
+            ArrayList<String> mentions = new ArrayList<>();
+            ArrayList<String> hashtags = new ArrayList<>();
+            ArrayList<URL> urls = new ArrayList<>();
+
+            Element tweetTextDiv = tweetTable.getElementsByClass("tweet-text").first();
+            tweetText = tweetTextDiv.text();
+            tweetID = tweetTextDiv.attr("data-id");
+            Elements linksAndHashtags = tweetTextDiv.getElementsByTag("a");
+
+            if (linksAndHashtags != null) {
+                for (Element anchorTag : linksAndHashtags) {
+                    Elements urlInTweet = anchorTag.getElementsByClass("twitter_external_link dir-ltr tco-link");
+                    if (!urlInTweet.isEmpty()) {
+                        urls.add(new URL(urlInTweet.attr("data-url")));
+                    }
+
+                    Elements hashtagInTweet = anchorTag.getElementsByClass("twitter-hashtag dir-ltr");
+                    if (!hashtagInTweet.isEmpty()) {
+                        hashtags.add(hashtagInTweet.text());
+                    }
+
+                    Elements mentionsInTweet = anchorTag.getElementsByClass("twitter-atreply dir-ltr");
+                    if (!mentionsInTweet.isEmpty()) {
+                        mentions.add(mentionsInTweet.text());
+                    }
+                }
+            }
+
+            Element usernameDiv = tweetTable.getElementsByClass("username").first();
+            authorUsername = usernameDiv.text();
+
+            Element timestampTd = tweetTable.getElementsByClass("timestamp").first();
+            timestamp = timestampTd.text();
+
+            upperThread.add(new Tweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls));
+
+        }
         return upperThread;
     }
 }
+

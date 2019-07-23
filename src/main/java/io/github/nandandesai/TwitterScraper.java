@@ -60,8 +60,7 @@ public class TwitterScraper {
     }
 
     public List<Tweet> getUserTimeline(String username) throws IOException {
-        TweetScraper tweetScraper=new TweetScraper();
-        return tweetScraper.getHomeTimeline(username, cookies);
+        TweetScraper tweetScraper=new TweetScraper(cookies);
+        return tweetScraper.getHomeTimeline(username);
     }
-
 }
