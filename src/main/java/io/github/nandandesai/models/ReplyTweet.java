@@ -5,15 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplyTweet extends Tweet {
-    private List<Tweet> upperThread; //the series of tweets that appear above the present tweet in the thread.
-                                     //This means that even if there are tweets below this tweet in the same thread, they are not considered here.
+    private List<String> replyingTo;
 
-    public ReplyTweet(String tweetID, String authorUsername, String tweetText, String timestamp, ArrayList<Media> media, ArrayList<String> mentions, ArrayList<String> hashtags, ArrayList<URL> urls, List<Tweet> upperThread) {
+    public ReplyTweet(String tweetID, String authorUsername, String tweetText, String timestamp, ArrayList<Media> media, ArrayList<String> mentions, ArrayList<String> hashtags, ArrayList<URL> urls, List<String> replyingTo) {
         super(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls);
-        this.upperThread=upperThread;
+        this.replyingTo=replyingTo;
     }
 
-    public List<Tweet> getUpperThread() {
-        return upperThread;
+    public List<String> getReplyingTo() {
+        return replyingTo;
+    }
+
+    @Override
+    public String toString(){
+
+        return "{\n" +
+                "  \"tweetID\": \""+getTweetID()+"\",\n" +
+                "  \"authorUsername\": \""+getAuthorUsername()+"\",\n" +
+                "  \"tweetText\": \""+getTweetText()+"\",\n" +
+                "  \"timestamp\": \""+getTimestamp()+"\",\n" +
+                "  \"media\": "+getMedia().toString()+",\n" +
+                "  \"mentions\": "+getMentions().toString()+",\n" +
+                "  \"hashtags\": "+getHashtags().toString()+",\n" +
+                "  \"urls\": "+getUrls().toString()+"\n" +
+                "  \"replyingTo\": "+replyingTo.toString()+"\n" +
+                "}";
     }
 }

@@ -63,4 +63,11 @@ public class TwitterScraper {
         TweetScraper tweetScraper=new TweetScraper(cookies);
         return tweetScraper.getHomeTimeline(username);
     }
+
+    //the series of tweets that appear above the present tweet in the thread.
+    //This means that even if there are tweets below this tweet in the same thread, they are not considered here.0
+    public List<Tweet> getUpperThread(String username, String tweetId) throws IOException {
+        TweetScraper tweetScraper=new TweetScraper(cookies);
+        return tweetScraper.getUpperThread(username,tweetId);
+    }
 }

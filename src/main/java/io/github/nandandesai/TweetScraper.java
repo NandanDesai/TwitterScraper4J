@@ -92,10 +92,19 @@ class TweetScraper {
 
             }else if (isReply) {
 
-                //TODO: the below line takes a lot of time while executing. Do something about it.
-                //List<Tweet> upperThread=getUpperThread(username, tweetID);
-                List<Tweet> upperThread=null;
-                tweets.add(new ReplyTweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, upperThread));
+                List<String> replyingTo=new ArrayList<>();
+
+                Element replyDiv=tweetTable.getElementsByClass("tweet-reply-context username").first();
+                Elements replyingToTags=replyDiv.getElementsByTag("a");
+
+                for(Element replyUsernameTag:replyingToTags){
+                    String textInTag=replyUsernameTag.text();
+                    if(textInTag.contains("@")){
+                        replyingTo.add(textInTag);
+                    }
+                }
+
+                tweets.add(new ReplyTweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, replyingTo));
 
             }else{
 
@@ -107,7 +116,7 @@ class TweetScraper {
         return tweets;
     }
 
-    private List<Tweet> getUpperThread(String username, String tweetId) throws IOException {
+    List<Tweet> getUpperThread(String username, String tweetId) throws IOException {
         ArrayList<Tweet> upperThread = new ArrayList<>();
         String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username + "/status/" + tweetId;
         Document doc = Utils.getDocument(url, cookies);

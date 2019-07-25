@@ -55,5 +55,19 @@ public class Tweet {
     public ArrayList<URL> getUrls() {
         return urls;
     }
+
+    @Override
+    public String toString(){
+        return "{\n" +
+                "  \"tweetID\": \""+tweetID+"\",\n" +
+                "  \"authorUsername\": \""+authorUsername+"\",\n" +
+                "  \"tweetText\": \""+tweetText+"\",\n" +
+                "  \"timestamp\": \""+timestamp+"\",\n" +
+                "  \"media\": "+this.media.toString()+",\n" +
+                "  \"mentions\": "+this.mentions.toString()+",\n" +
+                "  \"hashtags\": "+this.hashtags.toString()+",\n" +
+                "  \"urls\": "+this.urls.toString()+"\n" +
+                "}";
+    }
 }
 

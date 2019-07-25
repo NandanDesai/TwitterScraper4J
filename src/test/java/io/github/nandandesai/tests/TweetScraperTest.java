@@ -1,7 +1,5 @@
 package io.github.nandandesai.tests;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.github.nandandesai.TwitterScraper;
 import io.github.nandandesai.models.Tweet;
 
@@ -14,7 +12,7 @@ public class TweetScraperTest {
             List<Tweet> tweets=twitterScraper.getUserTimeline("fs0c131y");
 
             for(Tweet tweet:tweets){
-                displayTweet(tweet);
+                System.out.println(tweet);
             }
 
         }catch (Exception e){
@@ -22,9 +20,4 @@ public class TweetScraperTest {
         }
     }
 
-    private static void displayTweet(Tweet tweet){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(tweet));
-        //System.out.println(profile);
-    }
 }
