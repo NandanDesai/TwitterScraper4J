@@ -38,7 +38,7 @@ public class Credentials {
             } else if (key.equals("ACCESS_TOKEN_SECRET")) {
                 accessTokenSecret=value;
             } else {
-                throw new IllegalArgumentException("invalid key in \"credentials\" file");
+                throw new IllegalArgumentException("invalid key in \"credentials.template\" file");
             }
 
         }
