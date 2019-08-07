@@ -1,5 +1,6 @@
 package io.github.nandandesai;
 
+import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Tweet;
 import io.github.nandandesai.models.UserSearchResult;
 import io.github.nandandesai.models.Profile;
@@ -50,24 +51,34 @@ public class TwitterScraper {
      * @throws IOException
      */
 
-    public Profile getProfile(String username) throws IOException {
+    public Profile getProfile(String username) throws IOException, TwitterException {
         return new ProfileScraper().getProfile(username, cookies);
     }
 
-    public List<UserSearchResult> searchUser(String query) throws IOException {
+    public List<UserSearchResult> searchUser(String query) throws IOException, TwitterException {
         SearchScraper searchScraper= new SearchScraper();
         return searchScraper.searchUser(query, cookies);
     }
 
-    public List<Tweet> getUserTimeline(String username) throws IOException {
+    public List<Tweet> getUserTimeline(String username) throws IOException, TwitterException {
         TweetScraper tweetScraper=new TweetScraper(cookies);
         return tweetScraper.getHomeTimeline(username);
     }
 
     //the series of tweets that appear above the present tweet in the thread.
     //This means that even if there are tweets below this tweet in the same thread, they are not considered here.0
-    public List<Tweet> getUpperThread(String username, String tweetId) throws IOException {
+    public List<Tweet> getUpperThread(String tweetId) throws IOException, TwitterException {
         TweetScraper tweetScraper=new TweetScraper(cookies);
-        return tweetScraper.getUpperThread(username,tweetId);
+        return tweetScraper.getUpperThread(tweetId);
+    }
+
+    public List<String> getWorldwideTrends() throws IOException, TwitterException {
+        SearchScraper searchScraper=new SearchScraper();
+        return searchScraper.worldwideTrends(cookies);
+    }
+
+    public Tweet getTweet(String tweetId) throws IOException, TwitterException {
+        TweetScraper tweetScraper=new TweetScraper(cookies);
+        return tweetScraper.getTweet(tweetId);
     }
 }

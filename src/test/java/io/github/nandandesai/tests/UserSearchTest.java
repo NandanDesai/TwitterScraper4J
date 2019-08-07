@@ -1,6 +1,7 @@
 package io.github.nandandesai.tests;
 
 import io.github.nandandesai.TwitterScraper;
+import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.UserSearchResult;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class UserSearchTest {
         testUserSearch("CIA");
         testUserSearch("Ryan Higa");
         testUserSearch("Chowkidar");
+        testUserSearch("asdlhkckhikdf");
     }
 
 
@@ -23,6 +25,8 @@ public class UserSearchTest {
                 System.out.println(result);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TwitterException e) {
             e.printStackTrace();
         }
     }

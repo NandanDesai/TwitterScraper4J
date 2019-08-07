@@ -1,6 +1,7 @@
 package io.github.nandandesai.tests;
 
 import io.github.nandandesai.TwitterScraper;
+import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Tweet;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class UpperThreadTest {
         try {
             TwitterScraper scraper=TwitterScraper.getInstance();
             //https://mobile.twitter.com/fs0c131y/status/1153053471375056897?p=p
-            List<Tweet> tweets=scraper.getUpperThread("fs0c131y","1153053471375056897");
+            List<Tweet> tweets=scraper.getUpperThread("1158702409742311424");
             displayTweets(tweets);
 
             System.out.println();
@@ -20,9 +21,11 @@ public class UpperThreadTest {
             System.out.println();
 
             //https://mobile.twitter.com/fs0c131y/status/1153956233533149184?p=p
-            tweets=scraper.getUpperThread("fs0c131y","1153956233533149184");
+            tweets=scraper.getUpperThread("1153956233533149184");
             displayTweets(tweets);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TwitterException e) {
             e.printStackTrace();
         }
     }

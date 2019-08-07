@@ -1,8 +1,7 @@
 package io.github.nandandesai;
 
+import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Profile;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -27,14 +26,14 @@ class ProfileScraper {
      * @return profile data if exists else returns null.
      * @throws IOException
      */
-    Profile getProfile(String username, Map<String, String> cookies) throws IOException {
+    Profile getProfile(String username, Map<String, String> cookies) throws IOException, TwitterException {
         if(username == null || username.equals("") || cookies == null){
             Logger.error(new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty"));
             return null;
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username;
         Logger.info("Fetching the profile using : "+url);
-        Document doc = Utils.getDocument(url,cookies);
+        Document doc = Utils.getDocument(url,cookies, ProfileScraper.class);
 
         String name="";
         String description="";
@@ -52,9 +51,23 @@ class ProfileScraper {
         //get the profile <div> tag
         Element profileDiv=doc.getElementsByClass("profile").first();
 
-        //if profileDiv doesn't exists, then that means the Profile also doesn't exists.  Return null in that case.
+        //if profileDiv doesn't exists, then that means the Profile also doesn't exists.
         if(profileDiv==null){
-            return null;
+
+            Element contentTable=doc.getElementsByClass("content").first();
+            Element titleDiv=contentTable.getElementsByClass("title").first();
+            Element subtitleDiv=contentTable.getElementsByClass("subtitle").first();
+            if(titleDiv!=null) {
+                if (titleDiv.text().contains("suspended")) {
+                    throw new TwitterException("User has been suspended.");
+                }
+            }
+            if(subtitleDiv!=null){
+                if(subtitleDiv.text().contains("withheld")){
+                    throw new TwitterException("User account has been withheld.");
+                }
+            }
+
         }
 
         //getting Profile Pic URL

@@ -1,8 +1,8 @@
 package io.github.nandandesai;
 
+import io.github.nandandesai.exceptions.TwitterException;
+import io.github.nandandesai.models.Tweet;
 import io.github.nandandesai.models.UserSearchResult;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 class SearchScraper {
 
-    List<UserSearchResult> searchUser(String query, Map<String, String> cookies) throws IOException {
+    List<UserSearchResult> searchUser(String query, Map<String, String> cookies) throws IOException, TwitterException {
         if(query == null || query.equals("") || cookies == null){
             Logger.error(new IllegalArgumentException("\"query\" or \"cookies\" cannot be null or empty"));
             return null;
@@ -38,7 +38,7 @@ class SearchScraper {
 
         String url="https://mobile.twitter.com/i/nojs_router?path="+urlPath;
         Logger.info("Searching for : \""+query+"\" with URL: "+url);
-        Document doc = Utils.getDocument(url,cookies);
+        Document doc = Utils.getDocument(url,cookies, SearchScraper.class);
 
         Element userListDiv=doc.getElementsByClass("user-list").first();
 
@@ -71,5 +71,28 @@ class SearchScraper {
 
         return userSearchResults;
 
+    }
+
+    List<String> worldwideTrends(Map<String, String> cookies) throws IOException, TwitterException {
+        String url="https://mobile.twitter.com/i/nojs_router?path=/trends";
+        Document doc=Utils.getDocument(url, cookies, SearchScraper.class);
+
+        List<String> trends=new ArrayList<>();
+
+        Elements topicLis=doc.getElementsByClass("topic");
+        for(Element topicLi:topicLis){
+            trends.add(topicLi.text());
+        }
+        return trends;
+    }
+
+    List<Tweet> searchHashtag(String hashtag){
+        //complete this
+        return null;
+    }
+
+    List<Tweet> search(String query){
+        //complete this
+        return null;
     }
 }

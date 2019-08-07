@@ -3,6 +3,7 @@ package io.github.nandandesai.tests;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.nandandesai.TwitterScraper;
+import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Profile;
 
 import java.io.IOException;
@@ -13,19 +14,21 @@ public class ProfileTest {
         testProfileFetch("fs0c131y"); //unverified
         testProfileFetch("realDonaldTrump"); //verified
         testProfileFetch("asdfasdfasdfasd121212"); //doesn't exists
+        testProfileFetch("kashmirintel"); //suspended
+        testProfileFetch("Gurmeetramrahim"); //withheld
     }
 
     private static void testProfileFetch(String username){
         try {
             TwitterScraper scraper = TwitterScraper.getInstance();
             Profile profile = scraper.getProfile(username);//fs0c131y
-            if (profile == null) {
-                System.out.println("Profile doesn't exists for username: " + username);
-            } else {
-                displayProfile(profile);
-            }
+            displayProfile(profile);
+
         }catch (IOException io){
             io.printStackTrace();
+        } catch (TwitterException e) {
+            System.out.println("Http Status Code: "+e.getHttpStatusCode());
+            e.printStackTrace();
         }
     }
 
