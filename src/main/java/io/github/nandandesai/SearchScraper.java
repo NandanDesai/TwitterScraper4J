@@ -6,7 +6,6 @@ import io.github.nandandesai.models.UserSearchResult;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,8 +19,7 @@ class SearchScraper {
 
     List<UserSearchResult> searchUser(String query, Map<String, String> cookies) throws IOException, TwitterException {
         if(query == null || query.equals("") || cookies == null){
-            Logger.error(new IllegalArgumentException("\"query\" or \"cookies\" cannot be null or empty"));
-            return null;
+            throw new IllegalArgumentException("\"query\" or \"cookies\" cannot be null or empty");
         }
 
         //even though I'm using URLEncoder later on in this code, it replaces spaces with '+' instead of "%20" which can be problematic for Twitter.
@@ -37,7 +35,6 @@ class SearchScraper {
         urlPath= URLEncoder.encode(urlPath, StandardCharsets.UTF_8.name());
 
         String url="https://mobile.twitter.com/i/nojs_router?path="+urlPath;
-        Logger.info("Searching for : \""+query+"\" with URL: "+url);
         Document doc = Utils.getDocument(url,cookies, SearchScraper.class);
 
         Element userListDiv=doc.getElementsByClass("user-list").first();

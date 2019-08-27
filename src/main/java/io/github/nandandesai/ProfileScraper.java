@@ -5,7 +5,6 @@ import io.github.nandandesai.models.Profile;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,11 +27,9 @@ class ProfileScraper {
      */
     Profile getProfile(String username, Map<String, String> cookies) throws IOException, TwitterException {
         if(username == null || username.equals("") || cookies == null){
-            Logger.error(new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty"));
-            return null;
+            throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username;
-        Logger.info("Fetching the profile using : "+url);
         Document doc = Utils.getDocument(url,cookies, ProfileScraper.class);
 
         String name="";
@@ -73,48 +70,40 @@ class ProfileScraper {
         //getting Profile Pic URL
         Element avatarTd=profileDiv.getElementsByClass("avatar").first();
         String imgUrl=avatarTd.child(0).attr("src");
-        Logger.info("Image URL: "+imgUrl);
         profilePicLink=new URL(imgUrl);
         String largerImgUrl=imgUrl.replace("normal","400x400");
-        Logger.info("Larger Image URL: "+largerImgUrl);
         largerProfilePicLink=new URL(largerImgUrl);
 
         //getting Fullname of the user
         Element nameDiv=profileDiv.getElementsByClass("fullname").first();
         name=nameDiv.text();
-        Logger.info("Name: "+name);
         try{
             //checking if the account is verified or not
             if(nameDiv.getElementsByClass("badge").first().child(0).attr("alt").equalsIgnoreCase("Verified Account")){
                 isVerified=true;
             }
         }catch (NullPointerException npe){}
-        Logger.info("isVerified: "+isVerified);
 
         Element protectedDiv=profileDiv.getElementsByClass("protected").first();
         if(protectedDiv!=null){
             isProtected=true;
         }
-        Logger.info("isProtected: "+isProtected);
 
         //getting the user location
         Element locationDiv=profileDiv.getElementsByClass("location").first();
         location=locationDiv.text();
-        Logger.info("Location: "+location);
 
         //getting the user description
         Element bioDiv=profileDiv.getElementsByClass("bio").first();
         description=bioDiv.text();
-        Logger.info("Description: "+description);
 
         try {
             //getting the user website
             Element urlDiv = profileDiv.getElementsByClass("url").first();
             String website = urlDiv.getElementsByTag("a").first().attr("href");
             userWebsite = new URL(website);
-            Logger.info("User website: " + website);
         }catch (MalformedURLException mue){
-            Logger.error(mue);
+
         }
 
         Elements statsTds=profileDiv.getElementsByClass("stat");
@@ -122,17 +111,14 @@ class ProfileScraper {
         //getting the number of tweets
         Element statnumDiv=statsTds.get(0).getElementsByClass("statnum").first();
         noOfTweets=getProperInts(statnumDiv.text());
-        Logger.info("Number of tweets: "+noOfTweets);
 
         //getting the number of friends
         statnumDiv=statsTds.get(1).getElementsByClass("statnum").first();
         noOfFriends=getProperInts(statnumDiv.text());
-        Logger.info("Number of friends: "+noOfFriends);
 
         //getting the number of followers
         statnumDiv=statsTds.get(2).getElementsByClass("statnum").first();
         noOfFollowers=getProperInts(statnumDiv.text());
-        Logger.info("Number of followers: "+noOfFollowers);
 
 
         return new Profile(name, username, description, location, noOfFollowers, noOfFriends, isVerified, isProtected, noOfTweets, profilePicLink, largerProfilePicLink, userWebsite);

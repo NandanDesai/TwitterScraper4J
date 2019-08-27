@@ -8,7 +8,6 @@ import io.github.nandandesai.models.Tweet;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,11 +25,9 @@ class TweetScraper {
 
     List<Tweet> getHomeTimeline(String username) throws IOException, TwitterException {
         if (username == null || username.equals("") || cookies == null) {
-            Logger.error(new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty"));
-            return null;
+            throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
         }
         String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username;
-        Logger.info("Fetching the profile using : " + url);
         Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
         List<Tweet> tweets=new ArrayList<>();
 

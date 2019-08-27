@@ -9,7 +9,7 @@ public class TweetScraperTest {
     public static void main(String[] args){
         try {
             TwitterScraper twitterScraper = TwitterScraper.getInstance();
-            List<Tweet> tweets=twitterScraper.getUserTimeline("fs0c131y989898");
+            List<Tweet> tweets=twitterScraper.getUserTimeline("fs0c131y");
 
             for(Tweet tweet:tweets){
                 System.out.println(tweet);

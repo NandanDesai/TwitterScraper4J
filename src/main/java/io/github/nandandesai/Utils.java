@@ -4,7 +4,6 @@ import io.github.nandandesai.exceptions.TwitterException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ class Utils {
 
     //returns HTTP headers
     static Map<String, String> getHttpHeaders() {
-        Logger.info("Using Mozilla headers. Trying to emulate a browser as much as possible.");
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0");
         headers.put("Accept-Language", "en-US,en;q=0.5");

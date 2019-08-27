@@ -6,7 +6,6 @@ import io.github.nandandesai.models.UserSearchResult;
 import io.github.nandandesai.models.Profile;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,10 +21,8 @@ public class TwitterScraper {
     private Connection.Response response;
 
     private TwitterScraper() throws IOException {
-        Logger.info("Initializing Twitter Scraper!");
         response= Jsoup.connect("https://mobile.twitter.com").headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true).method(Connection.Method.GET).execute();
         cookies = response.cookies();
-        Logger.info("Cookies: "+cookies.toString());
     }
 
     /**
