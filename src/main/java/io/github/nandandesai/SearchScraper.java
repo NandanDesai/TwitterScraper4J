@@ -83,13 +83,17 @@ class SearchScraper {
         return trends;
     }
 
-    List<Tweet> searchHashtag(String hashtag){
-        //complete this
-        return null;
+    List<Tweet> searchHashtag(String hashtag, Map<String, String> cookies) throws IOException, TwitterException {
+        if(hashtag.startsWith("#")){
+            hashtag=hashtag.replaceFirst("#","");
+        }
+        String url="https://mobile.twitter.com/i/nojs_router?path="+URLEncoder.encode("/hashtag/"+hashtag,StandardCharsets.UTF_8.name());
+        return Common.scrapeTweets(url, cookies);
     }
 
-    List<Tweet> search(String query){
-        //complete this
-        return null;
+    List<Tweet> searchKeyword(String keyword, Map<String, String> cookies) throws IOException, TwitterException {
+        keyword=keyword.replace(" ","%20");
+        String url="https://mobile.twitter.com/i/nojs_router?path="+URLEncoder.encode("/search?q="+keyword,StandardCharsets.UTF_8.name());
+        return Common.scrapeTweets(url, cookies);
     }
 }

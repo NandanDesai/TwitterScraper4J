@@ -57,6 +57,16 @@ public class TwitterScraper {
         return searchScraper.searchUser(query, cookies);
     }
 
+    public List<Tweet> searchTweetsWithHashtag(String hashtag) throws IOException, TwitterException {
+        SearchScraper searchScraper= new SearchScraper();
+        return searchScraper.searchHashtag(hashtag, cookies);
+    }
+
+    public List<Tweet> searchTweetsWithKeyword(String keyword) throws IOException, TwitterException {
+        SearchScraper searchScraper= new SearchScraper();
+        return searchScraper.searchKeyword(keyword, cookies);
+    }
+
     public List<Tweet> getUserTimeline(String username) throws IOException, TwitterException {
         TweetScraper tweetScraper=new TweetScraper(cookies);
         return tweetScraper.getHomeTimeline(username);
