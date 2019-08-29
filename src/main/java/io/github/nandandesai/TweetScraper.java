@@ -27,8 +27,8 @@ class TweetScraper {
             throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
         }
         String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username;
-
-        return Common.scrapeTweets(url, cookies);
+        Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
+        return Common.scrapeTweets(doc);
     }
 
 

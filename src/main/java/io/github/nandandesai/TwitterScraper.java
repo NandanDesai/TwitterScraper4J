@@ -8,6 +8,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -87,5 +88,9 @@ public class TwitterScraper {
     public Tweet getTweet(String tweetId) throws IOException, TwitterException {
         TweetScraper tweetScraper=new TweetScraper(cookies);
         return tweetScraper.getTweet(tweetId);
+    }
+
+    public Iterator<List<Tweet>> getAllTweets(String username) {
+        return new ProfilePageIterator(username, cookies);
     }
 }

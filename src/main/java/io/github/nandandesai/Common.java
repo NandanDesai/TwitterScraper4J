@@ -1,6 +1,5 @@
 package io.github.nandandesai;
 
-import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Media;
 import io.github.nandandesai.models.ReplyTweet;
 import io.github.nandandesai.models.Retweet;
@@ -13,14 +12,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 class Common {
-    static List<Tweet> scrapeTweets(String url, Map<String, String> cookies) throws IOException, TwitterException {
-        if (url == null || url.equals("") || cookies == null) {
-            throw new IllegalArgumentException("\"url\" or \"cookies\" cannot be null or empty");
-        }
-        Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
+    static List<Tweet> scrapeTweets(Document doc) throws IOException {
+
+
         List<Tweet> tweets=new ArrayList<>();
 
         Elements tweetTables = doc.getElementsByClass("tweet  ");
