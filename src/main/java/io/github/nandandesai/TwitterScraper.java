@@ -1,9 +1,9 @@
 package io.github.nandandesai;
 
 import io.github.nandandesai.exceptions.TwitterException;
+import io.github.nandandesai.models.Profile;
 import io.github.nandandesai.models.Tweet;
 import io.github.nandandesai.models.UserSearchResult;
-import io.github.nandandesai.models.Profile;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -92,5 +92,9 @@ public class TwitterScraper {
 
     public Iterator<List<Tweet>> getAllTweets(String username) {
         return new ProfilePageIterator(username, cookies);
+    }
+
+    public Iterator<List<Tweet>> searchAllTweetsWithKeyword(String keyword)  {
+        return new SearchPageIterator(keyword, cookies);
     }
 }
