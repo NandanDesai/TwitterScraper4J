@@ -2,9 +2,9 @@
 
 This is a Java library which lets you fetch Twitter public data without the need to use any API.
 ## Getting Started
-JAR file is available in the '[Releases](https://github.com/NandanDesai/TwitterScraper4J/releases)' section. Download the JAR file and add it to your Java project to start using!
+JAR file is available in the [release](https://github.com/NandanDesai/TwitterScraper4J/releases) section. Download the JAR file, add it to your Java project and start using it!
 
-**Code Examples**
+#### Code Examples
 
  - *Getting Profile information like name, description, location, number of followers, verified status, profile picture etc.*
 
@@ -44,5 +44,5 @@ JAR file is available in the '[Releases](https://github.com/NandanDesai/TwitterS
     
 Refer [tests](https://github.com/NandanDesai/TwitterScraper4J/tree/master/src/test/java/io/github/nandandesai/tests) for more examples.
 
-
-
+## LICENSE
+[MIT](https://github.com/NandanDesai/TwitterScraper4J/blob/master/LICENSE)
