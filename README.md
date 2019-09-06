@@ -2,7 +2,7 @@
 
 This is a Java library which lets you fetch Twitter public data without the need to use any API.
 ## Getting Started
-JAR file is available here. Download the JAR file, add it to your Java project
+JAR file is available in the '[Releases](https://github.com/NandanDesai/TwitterScraper4J/releases)' section. Download the JAR file and add it to your Java project to start using!
 
 **Code Examples**
 
@@ -42,7 +42,7 @@ JAR file is available here. Download the JAR file, add it to your Java project
     System.out.println(scraper.getWorldwideTrends());
     ```
     
-Refer tests for more examples.
+Refer [tests](https://github.com/NandanDesai/TwitterScraper4J/tree/master/src/test/java/io/github/nandandesai/tests) for more examples.
 
 
 
