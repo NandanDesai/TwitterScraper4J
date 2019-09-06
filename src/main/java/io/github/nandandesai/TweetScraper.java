@@ -32,7 +32,6 @@ class TweetScraper {
     }
 
 
-    //TODO: get information about a single tweet https://mobile.twitter.com/a/status/<id>
     Tweet getTweet(String tweetId) throws IOException, TwitterException {
 
 
