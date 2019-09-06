@@ -43,6 +43,10 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
     ```
     
 Refer [tests](https://github.com/NandanDesai/TwitterScraper4J/tree/master/src/test/java/io/github/nandandesai/tests) for more examples.
+## To-do List
+- Getting media links
+- Timestamps
+- Getting a stream of tweets containing a given keyword (EXPERIMENTAL)
 
-## LICENSE
+## License
 [MIT](https://github.com/NandanDesai/TwitterScraper4J/blob/master/LICENSE)
