@@ -2,7 +2,7 @@ package io.github.nandandesai.tests;
 
 import io.github.nandandesai.TwitterScraper;
 import io.github.nandandesai.exceptions.TwitterException;
-import io.github.nandandesai.models.UserSearchResult;
+import io.github.nandandesai.models.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,8 +20,8 @@ public class UserSearchTest {
     private static void testUserSearch(String query){
         try {
             TwitterScraper scraper = TwitterScraper.getInstance();
-            List<UserSearchResult> userSearchResults =scraper.searchUser(query);
-            for (UserSearchResult result: userSearchResults){
+            List<User> users =scraper.searchUser(query);
+            for (User result: users){
                 System.out.println(result);
             }
         } catch (IOException e) {

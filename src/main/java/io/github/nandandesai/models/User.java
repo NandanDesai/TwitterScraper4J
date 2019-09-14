@@ -2,7 +2,7 @@ package io.github.nandandesai.models;
 
 import java.net.URL;
 
-public class UserSearchResult {
+public class User {
 
     private String username;
     private String name;
@@ -10,7 +10,7 @@ public class UserSearchResult {
     private URL largeProfilePic;
     private boolean isVerified;
 
-    public UserSearchResult(String username, String name, URL profilePic, URL largeProfilePic, boolean isVerified) {
+    public User(String username, String name, URL profilePic, URL largeProfilePic, boolean isVerified) {
         this.username = username;
         this.name = name;
         this.profilePic = profilePic;

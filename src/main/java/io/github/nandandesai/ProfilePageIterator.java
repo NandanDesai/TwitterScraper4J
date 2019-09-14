@@ -16,7 +16,7 @@ class ProfilePageIterator implements Iterator<List<Tweet>> {
     private Map<String, String> cookies;
     private Document doc;
 
-    public ProfilePageIterator(String username, Map<String, String> cookies) {
+    ProfilePageIterator(String username, Map<String, String> cookies) {
         this.cookies=cookies;
         if (username == null || username.equals("") || cookies == null) {
             throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");

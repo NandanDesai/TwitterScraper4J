@@ -29,8 +29,8 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
 
     ```java
     TwitterScraper scraper = TwitterScraper.getInstance();  
-    List< UserSearchResult > userSearchResults =scraper.searchUser("Narendra Modi");  
-    for (UserSearchResult result: userSearchResults){  
+    List< UserSearchResult > users =scraper.searchUser("Narendra Modi");  
+    for (UserSearchResult result: users){  
         System.out.println(result);  
     }
    ```

@@ -2,7 +2,7 @@ package io.github.nandandesai;
 
 import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Tweet;
-import io.github.nandandesai.models.UserSearchResult;
+import io.github.nandandesai.models.User;
 import io.github.nandandesai.models.Profile;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -53,7 +53,7 @@ public class TwitterScraper {
         return new ProfileScraper().getProfile(username, cookies);
     }
 
-    public List<UserSearchResult> searchUser(String query) throws IOException, TwitterException {
+    public List<User> searchUser(String query) throws IOException, TwitterException {
         SearchScraper searchScraper= new SearchScraper();
         return searchScraper.searchUser(query, cookies);
     }
@@ -92,5 +92,9 @@ public class TwitterScraper {
 
     public Iterator<List<Tweet>> getAllTweets(String username) {
         return new ProfilePageIterator(username, cookies);
+    }
+
+    public Iterator<List<User>> getAllFriends(String username){
+        return new FollowingListIterator(username, cookies);
     }
 }

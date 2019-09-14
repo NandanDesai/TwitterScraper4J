@@ -1,14 +1,12 @@
 package io.github.nandandesai;
 
-import io.github.nandandesai.models.Media;
-import io.github.nandandesai.models.ReplyTweet;
-import io.github.nandandesai.models.Retweet;
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.models.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,5 +98,45 @@ class Common {
         }
 
         return tweets;
+    }
+
+    static List<User> scrapeUsers(Document doc) throws MalformedURLException {
+
+        ArrayList<User> users =new ArrayList<>();
+        try {
+            Element userListDiv=doc.getElementsByClass("user-list").first();
+            Elements userItemsTables = userListDiv.getElementsByClass("user-item");
+
+
+
+        for(Element userItemTable : userItemsTables){
+            String username="";
+            String name="";
+            URL profilePic=null;
+            URL largeProfilePic=null;
+            boolean isVerified=false;
+
+            username=userItemTable.getElementsByClass("username").first().text();
+            name=userItemTable.getElementsByClass("fullname").first().text();
+            String imgUrl=userItemTable.getElementsByClass("profile-image").attr("src");
+            profilePic=new URL(imgUrl);
+            String largerImgUrl=imgUrl.replace("normal","400x400");
+            largeProfilePic=new URL(largerImgUrl);
+
+            Element verifiedImg=userItemTable.getElementsByAttributeValue("alt","Verified Account").first();
+            if(verifiedImg!=null){
+                isVerified=true;
+            }
+
+            users.add(new User(username, name, profilePic, largeProfilePic, isVerified));
+
+        }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(doc);
+        }
+        return users;
     }
 }
