@@ -15,7 +15,7 @@ class Common {
     static List<Tweet> scrapeTweets(Document doc) throws IOException {
 
 
-        List<Tweet> tweets=new ArrayList<>();
+        List<Tweet> tweets = new ArrayList<>();
 
         Elements tweetTables = doc.getElementsByClass("tweet  ");
         for (Element tweetTable : tweetTables) {
@@ -67,30 +67,30 @@ class Common {
             boolean isReply = !tweetTable.getElementsByClass("tweet-reply-context username").isEmpty();
 
             if (isRetweet) {
-                Element retweetTd=tweetTable.getElementsByClass("tweet-social-context").first();
-                String username=retweetTd.text().replace("retweeted","").trim();
+                Element retweetTd = tweetTable.getElementsByClass("tweet-social-context").first();
+                String username = retweetTd.text().replace("retweeted", "").trim();
                 String retweetedBy = username;
                 String comment = ""; //complete this
 
                 tweets.add(new Retweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, retweetedBy, comment));
 
-            }else if (isReply) {
+            } else if (isReply) {
 
-                List<String> replyingTo=new ArrayList<>();
+                List<String> replyingTo = new ArrayList<>();
 
-                Element replyDiv=tweetTable.getElementsByClass("tweet-reply-context username").first();
-                Elements replyingToTags=replyDiv.getElementsByTag("a");
+                Element replyDiv = tweetTable.getElementsByClass("tweet-reply-context username").first();
+                Elements replyingToTags = replyDiv.getElementsByTag("a");
 
-                for(Element replyUsernameTag:replyingToTags){
-                    String textInTag=replyUsernameTag.text();
-                    if(textInTag.contains("@")){
+                for (Element replyUsernameTag : replyingToTags) {
+                    String textInTag = replyUsernameTag.text();
+                    if (textInTag.contains("@")) {
                         replyingTo.add(textInTag);
                     }
                 }
 
                 tweets.add(new ReplyTweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls, replyingTo));
 
-            }else{
+            } else {
 
                 tweets.add(new Tweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls));
 
@@ -102,41 +102,35 @@ class Common {
 
     static List<User> scrapeUsers(Document doc) throws MalformedURLException {
 
-        ArrayList<User> users =new ArrayList<>();
-        try {
-            Element userListDiv=doc.getElementsByClass("user-list").first();
-            Elements userItemsTables = userListDiv.getElementsByClass("user-item");
+        ArrayList<User> users = new ArrayList<>();
+
+        Element userListDiv = doc.getElementsByClass("user-list").first();
+        Elements userItemsTables = userListDiv.getElementsByClass("user-item");
 
 
+        for (Element userItemTable : userItemsTables) {
+            String username = "";
+            String name = "";
+            URL profilePic = null;
+            URL largeProfilePic = null;
+            boolean isVerified = false;
 
-        for(Element userItemTable : userItemsTables){
-            String username="";
-            String name="";
-            URL profilePic=null;
-            URL largeProfilePic=null;
-            boolean isVerified=false;
+            username = userItemTable.getElementsByClass("username").first().text();
+            name = userItemTable.getElementsByClass("fullname").first().text();
+            String imgUrl = userItemTable.getElementsByClass("profile-image").attr("src");
+            profilePic = new URL(imgUrl);
+            String largerImgUrl = imgUrl.replace("normal", "400x400");
+            largeProfilePic = new URL(largerImgUrl);
 
-            username=userItemTable.getElementsByClass("username").first().text();
-            name=userItemTable.getElementsByClass("fullname").first().text();
-            String imgUrl=userItemTable.getElementsByClass("profile-image").attr("src");
-            profilePic=new URL(imgUrl);
-            String largerImgUrl=imgUrl.replace("normal","400x400");
-            largeProfilePic=new URL(largerImgUrl);
-
-            Element verifiedImg=userItemTable.getElementsByAttributeValue("alt","Verified Account").first();
-            if(verifiedImg!=null){
-                isVerified=true;
+            Element verifiedImg = userItemTable.getElementsByAttributeValue("alt", "Verified Account").first();
+            if (verifiedImg != null) {
+                isVerified = true;
             }
 
             users.add(new User(username, name, profilePic, largeProfilePic, isVerified));
 
         }
 
-
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(doc);
-        }
         return users;
     }
 }
