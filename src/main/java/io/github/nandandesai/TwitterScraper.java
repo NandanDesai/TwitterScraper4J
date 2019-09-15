@@ -138,9 +138,11 @@ public class TwitterScraper {
     }
 
     public Iterator<List<User>> searchAllUsers(String query) {
+        if (query == null || query.equals("")) {
+            throw new IllegalArgumentException("\"query\" cannot be null or empty");
+        }
         query=query.replace(" ","%20");
         String urlPath="/search/users?q="+query+"&s=typd";
-        //Now, formally encode URLs. Without this, Twitter won't understand the query
         try {
             urlPath= URLEncoder.encode(urlPath, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
@@ -150,4 +152,17 @@ public class TwitterScraper {
         return new UserListIterator(url, cookies);
     }
 
+    public Iterator<List<Tweet>> searchAllTweets(String query){
+        if (query == null || query.equals("")) {
+            throw new IllegalArgumentException("\"query\" cannot be null or empty");
+        }
+        query=query.replace(" ","%20");
+        String url="";
+        try {
+            url="https://mobile.twitter.com/i/nojs_router?path="+ URLEncoder.encode("/search?q="+query, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return new TweetListIterator(url, cookies);
+    }
 }
