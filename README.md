@@ -48,7 +48,7 @@ Refer [tests](https://github.com/NandanDesai/TwitterScraper4J/tree/master/src/te
  - [ ] Complete 'retweet with comment'
  - [ ] Timestamps
  - [ ] Getting a stream of tweets containing a given keyword (EXPERIMENTAL)
- - [ ] Followers of a given user
+ - [x] Followers of a given user
  - [x] Friends of a given user
  
 ## License

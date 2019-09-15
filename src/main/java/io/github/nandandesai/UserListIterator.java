@@ -12,21 +12,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-class FollowingListIterator  implements Iterator<List<User>> {
-
+public class UserListIterator implements Iterator<List<User>> {
     private String nextUrl;
     private String prevUrl;
     private Map<String, String> cookies;
     private Document doc;
     private boolean click=false;
 
-    FollowingListIterator(String username, Map<String, String> cookies){
+    UserListIterator(String url, Map<String, String> cookies){
         this.cookies=cookies;
-        if (username == null || username.equals("") || cookies == null) {
-            throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
-        }
         prevUrl="https://mobile.twitter.com/";
-        nextUrl = "https://mobile.twitter.com/i/nojs_router?path=/"+username+"/following";
+        nextUrl=url;
     }
 
     @Override
@@ -94,8 +90,6 @@ class FollowingListIterator  implements Iterator<List<User>> {
                 .header("Pragma", "no-cache")
                 .cookies(cookies)
                 .execute();
-        System.out.println(response.url());
-        System.out.println(cookies);
         int statusCode = response.statusCode();
         if (statusCode == 404) {
             throw new TwitterException(404, "User not found.");
