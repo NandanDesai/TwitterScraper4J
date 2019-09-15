@@ -23,7 +23,7 @@ public class KeywordSearchPageIteratorTest {
                     System.out.println(tweet);
                     tweetCount++;
                 }
-                Thread.sleep(4000);
+                Thread.sleep(1000);
             }
         }catch (Exception e){
             e.printStackTrace();

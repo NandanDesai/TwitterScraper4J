@@ -17,23 +17,24 @@ class SearchPageIterator implements Iterator<List<Tweet>> {
     private String prevUrl;
     private Map<String, String> cookies;
     private Document doc;
+    private boolean click=false;
 
-    SearchPageIterator(String keyword, Map<String, String> cookies) {
+    SearchPageIterator(String url, Map<String, String> cookies){
         this.cookies=cookies;
-        keyword=keyword.replace(" ","%20");
-        String link= null;
-        link = "https://mobile.twitter.com/i/nojs_router?path="+ "/search?q="+keyword+"&s=typd&x=23&y=7";
         prevUrl="https://mobile.twitter.com/";
-        nextUrl=link;
+        nextUrl=url;
     }
 
     @Override
     public boolean hasNext() {
         try {
             if(nextUrl!=null) {
-                System.out.println("Referer: "+prevUrl);
-                System.out.println("nextUrl: "+nextUrl);
-                this.doc = getDocument(nextUrl, cookies, prevUrl);
+                if(!click) {
+                    this.doc = getFirstDocument();
+                    click=true;
+                }else{
+                    this.doc = getNextDocument();
+                }
                 return true;
             }else{
                 return false;
@@ -51,11 +52,10 @@ class SearchPageIterator implements Iterator<List<Tweet>> {
     public List<Tweet> next() {
         try {
             List<Tweet> tweets=Common.scrapeTweets(doc);
-            Element refreshTd=doc.getElementsByClass("r").first();
-            if(refreshTd!=null){
+            Element moreTweetDiv=doc.getElementsByClass("w-button-more").first();
+            if(moreTweetDiv!=null){
                 prevUrl=nextUrl;
-                System.out.println("refresh link: "+refreshTd.child(0).attr("href"));
-                nextUrl="https://mobile.twitter.com/i/nojs_router?path="+refreshTd.child(0).attr("href");
+                nextUrl="https://mobile.twitter.com"+moreTweetDiv.child(0).attr("href");
             }else{
                 nextUrl=null;
             }
@@ -66,16 +66,37 @@ class SearchPageIterator implements Iterator<List<Tweet>> {
         }
     }
 
-    Document getDocument(String url, Map cookies, String referer) throws IOException, TwitterException {
-        Connection.Response response = Jsoup.connect(url).headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
+    private Document getFirstDocument() throws IOException, TwitterException {
+        Connection.Response response = Jsoup.connect(nextUrl).headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
                 .method(Connection.Method.POST)
-                .header("Referer", referer)
+                .header("Referer", prevUrl)
+                .cookies(cookies)
+                .execute();
+        this.cookies=response.cookies();
+        int statusCode = response.statusCode();
+        if (statusCode == 404) {
+            throw new TwitterException(404, "User not found.");
+        } else if (statusCode != 200) {
+            throw new TwitterException(statusCode, response.statusMessage());
+        }
+        return response.parse();
+    }
+
+    private Document getNextDocument() throws IOException, TwitterException {
+        Connection.Response response = Jsoup.connect(nextUrl).headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
+                .method(Connection.Method.GET)
+                .header("Referer", prevUrl)
+                .header("Cache-Control"," max-age=0, no-cache")
+                .header("Pragma", "no-cache")
                 .cookies(cookies)
                 .execute();
         int statusCode = response.statusCode();
-         if (statusCode != 200) {
+        if (statusCode == 404) {
+            throw new TwitterException(404, "User not found.");
+        } else if (statusCode != 200) {
             throw new TwitterException(statusCode, response.statusMessage());
         }
+
         return response.parse();
     }
 }

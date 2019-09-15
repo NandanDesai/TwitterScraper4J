@@ -8,6 +8,9 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +98,13 @@ public class TwitterScraper {
     }
 
     public Iterator<List<Tweet>> searchAllTweetsWithKeyword(String keyword)  {
-        return new SearchPageIterator(keyword, cookies);
+        keyword=keyword.replace(" ","%20");
+        String url="";
+        try {
+            url="https://mobile.twitter.com/i/nojs_router?path="+ URLEncoder.encode("/search?q="+keyword, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return new SearchPageIterator(url, cookies);
     }
 }
