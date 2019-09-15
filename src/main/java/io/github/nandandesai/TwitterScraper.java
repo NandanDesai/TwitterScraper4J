@@ -137,11 +137,15 @@ public class TwitterScraper {
         return new UserListIterator(url, cookies);
     }
 
-    public Iterator<List<User>> searchAllUsers(String query) throws UnsupportedEncodingException {
+    public Iterator<List<User>> searchAllUsers(String query) {
         query=query.replace(" ","%20");
         String urlPath="/search/users?q="+query+"&s=typd";
         //Now, formally encode URLs. Without this, Twitter won't understand the query
-        urlPath= URLEncoder.encode(urlPath, StandardCharsets.UTF_8.name());
+        try {
+            urlPath= URLEncoder.encode(urlPath, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String url="https://mobile.twitter.com/i/nojs_router?path="+urlPath;
         return new UserListIterator(url, cookies);
     }
