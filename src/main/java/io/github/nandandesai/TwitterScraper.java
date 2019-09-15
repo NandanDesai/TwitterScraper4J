@@ -165,4 +165,18 @@ public class TwitterScraper {
         }
         return new TweetListIterator(url, cookies);
     }
+
+    public TweetStream getTweetStream(String query){
+        if (query == null || query.equals("")) {
+            throw new IllegalArgumentException("\"query\" cannot be null or empty");
+        }
+        query=query.replace(" ","%20");
+        String url="";
+        try {
+            url="https://mobile.twitter.com/i/nojs_router?path="+ URLEncoder.encode("/search?q="+query, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return new TweetStream(new TweetStreamIterator(url, cookies));
+    }
 }
