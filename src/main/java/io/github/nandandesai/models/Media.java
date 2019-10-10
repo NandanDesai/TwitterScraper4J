@@ -1,7 +1,7 @@
 package io.github.nandandesai.models;
 
 public class Media {
-    enum TYPE{
+    public enum TYPE{
         PICTURE, VIDEO, GIF
     }
     private TYPE type;
@@ -18,5 +18,13 @@ public class Media {
 
     public String getLink() {
         return link;
+    }
+
+    @Override
+    public String toString(){
+        return "{\n" +
+                "  \"type\": \""+type+"\",\n" +
+                "  \"url\": "+link+"\n" +
+                "}";
     }
 }

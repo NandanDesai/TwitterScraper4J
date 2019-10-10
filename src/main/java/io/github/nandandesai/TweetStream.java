@@ -8,7 +8,7 @@ public class TweetStream {
     private TweetStreamListener streamListener;
 
     private TweetStreamIterator streamIterator;
-
+    private volatile boolean stop=false;
     TweetStream(TweetStreamIterator streamIterator){
         this.streamIterator=streamIterator;
     }
@@ -24,7 +24,7 @@ public class TweetStream {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(streamIterator.hasNext()){
+                while(streamIterator.hasNext() && !stop){
                     List<Tweet> tweets=streamIterator.next();
                     streamListener.onPageRefresh(tweets);
                     try {
@@ -37,4 +37,10 @@ public class TweetStream {
         }).start();
 
     }
+
+    //TODO: stopping the stream
+    public void stop(){
+        stop=true;
+    }
 }
+
