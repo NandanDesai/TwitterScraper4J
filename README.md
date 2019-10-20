@@ -4,7 +4,9 @@ This is a Java library which lets you fetch Twitter public data without the need
 
 #### Pros
 - The JAR file for this entire library is just 430 KB.
-- Can fetch around 3200 tweets for any public account.
+- Unlike the official Twitter API, TwitterScraper4J doesn't have any rate limits.
+- Unlike the official Twitter API, TwitterScraper4J doesn't require any generation of Tokens, Keys etc. It's just a plug and play library.
+- Can fetch around 3200 (or sometimes more) tweets for any public account.
 - Get basic profile information.
 - Search for users.
 - Search for tweets (with keywords, hashtags etc.).
