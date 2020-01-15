@@ -1,14 +1,14 @@
 package io.github.nandandesai;
 
 import io.github.nandandesai.exceptions.TwitterException;
+import io.github.nandandesai.models.Profile;
 import io.github.nandandesai.models.Tweet;
 import io.github.nandandesai.models.User;
-import io.github.nandandesai.models.Profile;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.Proxy;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -16,16 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A class which does all the heavy duty work of scraping Twitter page
+ * A class which acts as an endpoint for all the tasks this library can do.
  * @author Nandan Desai
  */
 public class TwitterScraper {
     private static TwitterScraper scraper;
     private Map<String, String> cookies;
     private Connection.Response response;
+    private Proxy proxy=null;
 
-    private TwitterScraper() throws IOException {
-        response= Jsoup.connect("https://mobile.twitter.com").headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true).method(Connection.Method.GET).execute();
+    private TwitterScraper(Proxy proxy) throws IOException {
+        this.proxy=proxy;
+        response=Utils.getJsoupConnection("https://mobile.twitter.com", proxy).method(Connection.Method.GET).execute();
         cookies = response.cookies();
     }
 
@@ -35,10 +37,11 @@ public class TwitterScraper {
      * @return object of TwitterScraper class.
      * @throws IOException
      */
+    @Deprecated
     public static TwitterScraper getInstance() throws IOException {
         synchronized (TwitterScraper.class) {
             if (scraper == null) {
-                scraper=new TwitterScraper();
+                scraper=new TwitterScraper(null);
             }
             return scraper;
         }
@@ -56,7 +59,7 @@ public class TwitterScraper {
         if (username == null || username.equals("")) {
             throw new IllegalArgumentException("\"username\" cannot be null or empty");
         }
-        return new ProfileScraper().getProfile(username, cookies);
+        return new ProfileScraper().getProfile(username, cookies, proxy);
     }
 
     public List<User> searchUser(String query) throws IOException, TwitterException {
@@ -64,7 +67,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"query\" cannot be null or empty");
         }
         SearchScraper searchScraper= new SearchScraper();
-        return searchScraper.searchUser(query, cookies);
+        return searchScraper.searchUser(query, cookies, proxy);
     }
 
     public List<Tweet> searchTweetsWithHashtag(String hashtag) throws IOException, TwitterException {
@@ -72,7 +75,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"hashtag\" cannot be null or empty");
         }
         SearchScraper searchScraper= new SearchScraper();
-        return searchScraper.searchHashtag(hashtag, cookies);
+        return searchScraper.searchHashtag(hashtag, cookies, proxy);
     }
 
     public List<Tweet> searchTweetsWithKeyword(String keyword) throws IOException, TwitterException {
@@ -80,7 +83,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"keyword\" cannot be null or empty");
         }
         SearchScraper searchScraper= new SearchScraper();
-        return searchScraper.searchKeyword(keyword, cookies);
+        return searchScraper.searchKeyword(keyword, cookies, proxy);
     }
 
     public List<Tweet> getUserTimeline(String username) throws IOException, TwitterException {
@@ -88,7 +91,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"username\" cannot be null or empty");
         }
         TweetScraper tweetScraper=new TweetScraper(cookies);
-        return tweetScraper.getHomeTimeline(username);
+        return tweetScraper.getHomeTimeline(username, proxy);
     }
 
     //the series of tweets that appear above the present tweet in the thread.
@@ -98,12 +101,12 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"tweetId\" cannot be null or empty");
         }
         TweetScraper tweetScraper=new TweetScraper(cookies);
-        return tweetScraper.getUpperThread(tweetId);
+        return tweetScraper.getUpperThread(tweetId, proxy);
     }
 
     public List<String> getWorldwideTrends() throws IOException, TwitterException {
         SearchScraper searchScraper=new SearchScraper();
-        return searchScraper.worldwideTrends(cookies);
+        return searchScraper.worldwideTrends(cookies, proxy);
     }
 
     public Tweet getTweet(String tweetId) throws IOException, TwitterException {
@@ -111,14 +114,14 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"tweetId\" cannot be null or empty");
         }
         TweetScraper tweetScraper=new TweetScraper(cookies);
-        return tweetScraper.getTweet(tweetId);
+        return tweetScraper.getTweet(tweetId, proxy);
     }
 
     public Iterator<List<Tweet>> getAllTweets(String username) {
         if (username == null || username.equals("")) {
             throw new IllegalArgumentException("\"username\" cannot be null or empty");
         }
-        return new ProfilePageIterator(username, cookies);
+        return new ProfilePageIterator(username, cookies, proxy);
     }
 
     public Iterator<List<User>> getAllFriends(String username){
@@ -126,7 +129,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"username\" cannot be null or empty");
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username+"/following";
-        return new UserListIterator(url, cookies);
+        return new UserListIterator(url, cookies, proxy);
     }
 
     public Iterator<List<User>> getAllFollowers(String username){
@@ -134,7 +137,7 @@ public class TwitterScraper {
             throw new IllegalArgumentException("\"username\" cannot be null or empty");
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username+"/followers";
-        return new UserListIterator(url, cookies);
+        return new UserListIterator(url, cookies, proxy);
     }
 
     public Iterator<List<User>> searchAllUsers(String query) {
@@ -149,7 +152,7 @@ public class TwitterScraper {
             e.printStackTrace();
         }
         String url="https://mobile.twitter.com/i/nojs_router?path="+urlPath;
-        return new UserListIterator(url, cookies);
+        return new UserListIterator(url, cookies, proxy);
     }
 
     public Iterator<List<Tweet>> searchAllTweets(String query){
@@ -163,7 +166,7 @@ public class TwitterScraper {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return new TweetListIterator(url, cookies);
+        return new TweetListIterator(url, cookies, proxy);
     }
 
     public TweetStream getTweetStream(String query){
@@ -177,6 +180,27 @@ public class TwitterScraper {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return new TweetStream(new TweetStreamIterator(url, cookies));
+        return new TweetStream(new TweetStreamIterator(url, cookies, proxy));
+    }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static class Builder{
+        private Proxy proxy;
+        private static TwitterScraper scraper;
+
+        public Builder proxy(Proxy proxy){
+            this.proxy=proxy;
+            return this;
+        }
+
+        public TwitterScraper build() throws IOException {
+            if(scraper==null){
+                scraper=new TwitterScraper(proxy);
+            }
+            return scraper;
+        }
     }
 }

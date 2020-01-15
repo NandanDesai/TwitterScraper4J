@@ -3,11 +3,11 @@ package io.github.nandandesai;
 import io.github.nandandesai.exceptions.TwitterException;
 import io.github.nandandesai.models.Tweet;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +18,10 @@ public class TweetListIterator implements Iterator<List<Tweet>> {
     private Map<String, String> cookies;
     private Document doc;
     private boolean click=false;
+    private Proxy proxy;
 
-    TweetListIterator(String url, Map<String, String> cookies){
+    TweetListIterator(String url, Map<String, String> cookies, Proxy proxy){
+        this.proxy=proxy;
         this.cookies=cookies;
         prevUrl="https://mobile.twitter.com/";
         nextUrl=url;
@@ -67,7 +69,7 @@ public class TweetListIterator implements Iterator<List<Tweet>> {
     }
 
     private Document getFirstDocument() throws IOException, TwitterException {
-        Connection.Response response = Jsoup.connect(nextUrl).headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
+        Connection.Response response = Utils.getJsoupConnection(nextUrl, proxy)
                 .method(Connection.Method.POST)
                 .header("Referer", prevUrl)
                 .cookies(cookies)
@@ -83,7 +85,7 @@ public class TweetListIterator implements Iterator<List<Tweet>> {
     }
 
     private Document getNextDocument() throws IOException, TwitterException {
-        Connection.Response response = Jsoup.connect(nextUrl).headers(Utils.getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
+        Connection.Response response = Utils.getJsoupConnection(nextUrl, proxy)
                 .method(Connection.Method.GET)
                 .header("Referer", prevUrl)
                 .header("Cache-Control"," max-age=0, no-cache")

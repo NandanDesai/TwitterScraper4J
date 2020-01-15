@@ -103,12 +103,21 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
        stream.start();
       ```
 
+ - *To use a proxy*
+
+    ```java
+    Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(<ip address>, <port>));
+    TwitterScraper twitterScraper = TwitterScraper.builder().proxy(proxy).build();
+   ```
+
+
+
 **There is a lot more this library can offer. Refer [tests](https://github.com/NandanDesai/TwitterScraper4J/tree/master/src/test/java/io/github/nandandesai/tests) for other examples.**
 ## To-do List
  - [x] Getting media links
  - [ ] Complete 'retweet with comment'
  - [ ] Timestamps
- - [ ] Add proxy support
+ - [x] Add proxy support
  - [x] Getting a stream of tweets containing a given keyword (EXPERIMENTAL)
  - [x] Followers of a given user
  - [x] Friends of a given user

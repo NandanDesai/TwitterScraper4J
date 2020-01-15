@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 class SearchScraper {
 
-    List<User> searchUser(String query, Map<String, String> cookies) throws IOException, TwitterException {
+    List<User> searchUser(String query, Map<String, String> cookies, Proxy proxy) throws IOException, TwitterException {
         if(query == null || query.equals("") || cookies == null){
             throw new IllegalArgumentException("\"query\" or \"cookies\" cannot be null or empty");
         }
@@ -34,15 +35,15 @@ class SearchScraper {
         urlPath= URLEncoder.encode(urlPath, StandardCharsets.UTF_8.name());
 
         String url="https://mobile.twitter.com/i/nojs_router?path="+urlPath;
-        Document doc = Utils.getDocument(url,cookies, SearchScraper.class);
+        Document doc = Utils.getDocument(url,cookies, SearchScraper.class, proxy);
 
         return Common.scrapeUsers(doc);
 
     }
 
-    List<String> worldwideTrends(Map<String, String> cookies) throws IOException, TwitterException {
+    List<String> worldwideTrends(Map<String, String> cookies, Proxy proxy) throws IOException, TwitterException {
         String url="https://mobile.twitter.com/i/nojs_router?path=/trends";
-        Document doc=Utils.getDocument(url, cookies, SearchScraper.class);
+        Document doc=Utils.getDocument(url, cookies, SearchScraper.class, proxy);
 
         List<String> trends=new ArrayList<>();
 
@@ -53,19 +54,19 @@ class SearchScraper {
         return trends;
     }
 
-    List<Tweet> searchHashtag(String hashtag, Map<String, String> cookies) throws IOException, TwitterException {
+    List<Tweet> searchHashtag(String hashtag, Map<String, String> cookies, Proxy proxy) throws IOException, TwitterException {
         if(hashtag.startsWith("#")){
             hashtag=hashtag.replaceFirst("#","");
         }
         String url="https://mobile.twitter.com/i/nojs_router?path="+URLEncoder.encode("/hashtag/"+hashtag,StandardCharsets.UTF_8.name());
-        Document doc = Utils.getDocument(url, cookies, SearchScraper.class);
+        Document doc = Utils.getDocument(url, cookies, SearchScraper.class, proxy);
         return Common.scrapeTweets(doc);
     }
 
-    List<Tweet> searchKeyword(String keyword, Map<String, String> cookies) throws IOException, TwitterException {
+    List<Tweet> searchKeyword(String keyword, Map<String, String> cookies, Proxy proxy) throws IOException, TwitterException {
         keyword=keyword.replace(" ","%20");
         String url="https://mobile.twitter.com/i/nojs_router?path="+URLEncoder.encode("/search?q="+keyword,StandardCharsets.UTF_8.name());
-        Document doc = Utils.getDocument(url, cookies, SearchScraper.class);
+        Document doc = Utils.getDocument(url, cookies, SearchScraper.class, proxy);
         return Common.scrapeTweets(doc);
     }
 }

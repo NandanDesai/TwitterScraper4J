@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +22,20 @@ class TweetScraper {
         this.cookies = cookies;
     }
 
-    List<Tweet> getHomeTimeline(String username) throws IOException, TwitterException {
+    List<Tweet> getHomeTimeline(String username, Proxy proxy) throws IOException, TwitterException {
 
         if (username == null || username.equals("") || cookies == null) {
             throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
         }
         String url = "https://mobile.twitter.com/i/nojs_router?path=/" + username;
-        Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
+        Document doc = Utils.getDocument(url, cookies, TweetScraper.class, proxy);
         return Common.scrapeTweets(doc);
     }
 
 
-    Tweet getTweet(String tweetId) throws IOException, TwitterException {
+    Tweet getTweet(String tweetId, Proxy proxy) throws IOException, TwitterException {
         String url = "https://mobile.twitter.com/i/nojs_router?path=/a/status/" + tweetId;
-        Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
+        Document doc = Utils.getDocument(url, cookies, TweetScraper.class, proxy);
 
         String tweetID = "";
         String authorUsername = "";
@@ -82,7 +83,7 @@ class TweetScraper {
         }else if(imgSrc.contains("tweet_video_thumb")){
             String[] parts=imgSrc.split("/");
             String lastPart=parts[4];
-            System.out.println(lastPart);
+            //System.out.println(lastPart);
             String gifId=lastPart.split("\\.")[0];
             String gifUrl="https://video.twimg.com/tweet_video/"+gifId+".mp4";
             media.add(new Media(Media.TYPE.GIF,gifUrl));
@@ -92,10 +93,10 @@ class TweetScraper {
         return new Tweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls);
     }
 
-    List<Tweet> getUpperThread(String tweetId) throws IOException, TwitterException {
+    List<Tweet> getUpperThread(String tweetId, Proxy proxy) throws IOException, TwitterException {
         ArrayList<Tweet> upperThread = new ArrayList<>();
         String url = "https://mobile.twitter.com/i/nojs_router?path=/a/status/" + tweetId;
-        Document doc = Utils.getDocument(url, cookies, TweetScraper.class);
+        Document doc = Utils.getDocument(url, cookies, TweetScraper.class, proxy);
 
 
         Element inReplyTos = doc.getElementsByClass("timeline inreplytos").first();

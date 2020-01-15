@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Map;
 
@@ -25,12 +26,12 @@ class ProfileScraper {
      * @return profile data if exists else returns null.
      * @throws IOException
      */
-    Profile getProfile(String username, Map<String, String> cookies) throws IOException, TwitterException {
+    Profile getProfile(String username, Map<String, String> cookies, Proxy proxy) throws IOException, TwitterException {
         if(username == null || username.equals("") || cookies == null){
             throw new IllegalArgumentException("\"username\" or \"cookies\" cannot be null or empty");
         }
         String url="https://mobile.twitter.com/i/nojs_router?path=/"+username;
-        Document doc = Utils.getDocument(url,cookies, ProfileScraper.class);
+        Document doc = Utils.getDocument(url,cookies, ProfileScraper.class, proxy);
 
         String name="";
         String description="";

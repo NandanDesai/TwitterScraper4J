@@ -6,13 +6,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
 class Utils {
 
     //returns HTTP headers
-    static Map<String, String> getHttpHeaders() {
+    private static Map<String, String> getHttpHeaders() {
         Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0");
         headers.put("Accept-Language", "en-US,en;q=0.5");
@@ -23,8 +24,8 @@ class Utils {
         return headers;
     }
 
-    static Document getDocument(String url, Map cookies, Class callingClass) throws IOException, TwitterException {
-        Connection.Response response = Jsoup.connect(url).headers(getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true)
+    static Document getDocument(String url, Map cookies, Class callingClass, Proxy proxy) throws IOException, TwitterException {
+        Connection.Response response = getJsoupConnection(url, proxy)
                 .method(Connection.Method.POST)
                 .header("Referer", "https://mobile.twitter.com/")
                 .cookies(cookies)
@@ -38,6 +39,14 @@ class Utils {
             throw new TwitterException(statusCode, response.statusMessage());
         }
         return response.parse();
+    }
+
+    static Connection getJsoupConnection(String url, Proxy proxy){
+        if(proxy!=null){
+            return Jsoup.connect(url).headers(getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true).proxy(proxy);
+        }else{
+            return Jsoup.connect(url).headers(getHttpHeaders()).ignoreHttpErrors(true).followRedirects(true);
+        }
     }
 
 }
