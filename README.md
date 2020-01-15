@@ -108,6 +108,7 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
  - [x] Getting media links
  - [ ] Complete 'retweet with comment'
  - [ ] Timestamps
+ - [ ] Add proxy support
  - [x] Getting a stream of tweets containing a given keyword (EXPERIMENTAL)
  - [x] Followers of a given user
  - [x] Friends of a given user
