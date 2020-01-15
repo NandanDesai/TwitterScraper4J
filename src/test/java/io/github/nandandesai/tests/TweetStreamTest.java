@@ -1,9 +1,9 @@
 package io.github.nandandesai.tests;
 
-import io.github.nandandesai.TweetStream;
-import io.github.nandandesai.TweetStreamListener;
-import io.github.nandandesai.TwitterScraper;
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.twitterscraper4j.TweetStream;
+import io.github.nandandesai.twitterscraper4j.TweetStreamListener;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.models.Tweet;
 
 import java.io.IOException;
 import java.util.List;

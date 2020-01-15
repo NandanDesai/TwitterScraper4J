@@ -1,7 +1,7 @@
-package io.github.nandandesai;
+package io.github.nandandesai.twitterscraper4j;
 
-import io.github.nandandesai.exceptions.TwitterException;
-import io.github.nandandesai.models.User;
+import io.github.nandandesai.twitterscraper4j.exceptions.TwitterException;
+import io.github.nandandesai.twitterscraper4j.models.User;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

@@ -1,4 +1,4 @@
-package io.github.nandandesai.models;
+package io.github.nandandesai.twitterscraper4j.models;
 
 import java.net.URL;
 

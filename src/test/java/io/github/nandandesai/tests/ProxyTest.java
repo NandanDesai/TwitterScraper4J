@@ -1,7 +1,7 @@
 package io.github.nandandesai.tests;
 
-import io.github.nandandesai.TwitterScraper;
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.models.Tweet;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;

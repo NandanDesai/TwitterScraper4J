@@ -1,6 +1,6 @@
 package io.github.nandandesai.tests;
 
-import io.github.nandandesai.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
 
 public class TweetScraperTest2 {
     public static void main(String[] args){

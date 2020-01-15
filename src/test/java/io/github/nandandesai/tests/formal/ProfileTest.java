@@ -1,7 +1,7 @@
 package io.github.nandandesai.tests.formal;
 
-import io.github.nandandesai.TwitterScraper;
-import io.github.nandandesai.models.Profile;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.models.Profile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class ProfileTest {
 
 
     @Before
-    public void initialize() throws IOException, TwitterException, io.github.nandandesai.exceptions.TwitterException, URISyntaxException {
+    public void initialize() throws IOException, TwitterException, io.github.nandandesai.twitterscraper4j.exceptions.TwitterException, URISyntaxException {
         Credentials credentials=new Credentials();
 
         ConfigurationBuilder cb = new ConfigurationBuilder();

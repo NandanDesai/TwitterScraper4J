@@ -1,7 +1,7 @@
-package io.github.nandandesai;
+package io.github.nandandesai.twitterscraper4j;
 
-import io.github.nandandesai.exceptions.TwitterException;
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.twitterscraper4j.exceptions.TwitterException;
+import io.github.nandandesai.twitterscraper4j.models.Tweet;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-class TweetStreamIterator  implements Iterator<List<Tweet>> {
+public class TweetListIterator implements Iterator<List<Tweet>> {
     private String nextUrl;
     private String prevUrl;
     private Map<String, String> cookies;
@@ -20,7 +20,7 @@ class TweetStreamIterator  implements Iterator<List<Tweet>> {
     private boolean click=false;
     private Proxy proxy;
 
-    TweetStreamIterator(String url, Map<String, String> cookies, Proxy proxy){
+    TweetListIterator(String url, Map<String, String> cookies, Proxy proxy){
         this.proxy=proxy;
         this.cookies=cookies;
         prevUrl="https://mobile.twitter.com/";
@@ -54,7 +54,7 @@ class TweetStreamIterator  implements Iterator<List<Tweet>> {
     public List<Tweet> next() {
         try {
             List<Tweet> tweets=Common.scrapeTweets(doc);
-            Element moreTweetDiv=doc.getElementsByClass("r").first();
+            Element moreTweetDiv=doc.getElementsByClass("w-button-more").first();
             if(moreTweetDiv!=null){
                 prevUrl=nextUrl;
                 nextUrl="https://mobile.twitter.com"+moreTweetDiv.child(0).attr("href");

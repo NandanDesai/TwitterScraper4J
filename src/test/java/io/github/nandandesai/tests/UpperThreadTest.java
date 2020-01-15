@@ -1,8 +1,8 @@
 package io.github.nandandesai.tests;
 
-import io.github.nandandesai.TwitterScraper;
-import io.github.nandandesai.exceptions.TwitterException;
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.exceptions.TwitterException;
+import io.github.nandandesai.twitterscraper4j.models.Tweet;
 
 import java.io.IOException;
 import java.util.List;

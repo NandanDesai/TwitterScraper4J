@@ -2,9 +2,9 @@ package io.github.nandandesai.tests;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.nandandesai.TwitterScraper;
-import io.github.nandandesai.exceptions.TwitterException;
-import io.github.nandandesai.models.Profile;
+import io.github.nandandesai.twitterscraper4j.TwitterScraper;
+import io.github.nandandesai.twitterscraper4j.exceptions.TwitterException;
+import io.github.nandandesai.twitterscraper4j.models.Profile;
 
 import java.io.IOException;
 

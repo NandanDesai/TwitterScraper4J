@@ -1,6 +1,6 @@
-package io.github.nandandesai;
+package io.github.nandandesai.twitterscraper4j;
 
-import io.github.nandandesai.models.*;
+import io.github.nandandesai.twitterscraper4j.models.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

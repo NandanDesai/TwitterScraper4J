@@ -1,6 +1,6 @@
-package io.github.nandandesai;
+package io.github.nandandesai.twitterscraper4j;
 
-import io.github.nandandesai.models.Tweet;
+import io.github.nandandesai.twitterscraper4j.models.Tweet;
 
 import java.util.List;
 

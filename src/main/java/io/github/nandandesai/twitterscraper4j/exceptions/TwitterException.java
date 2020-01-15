@@ -1,4 +1,4 @@
-package io.github.nandandesai.exceptions;
+package io.github.nandandesai.twitterscraper4j.exceptions;
 
 public class TwitterException extends Exception {
     private int httpStatusCode=200;
