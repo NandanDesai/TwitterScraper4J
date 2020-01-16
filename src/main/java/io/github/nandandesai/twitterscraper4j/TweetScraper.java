@@ -75,20 +75,24 @@ class TweetScraper {
 
         Element timestampTd = tweetTable.getElementsByClass("metadata").first();
         timestamp = timestampTd.text();
-
-        Element mediaDiv=tweetTable.getElementsByClass("media").first();
-        String imgSrc=mediaDiv.child(0).attr("src");
-        if(imgSrc.contains("media")){
-            media.add(new Media(Media.TYPE.PICTURE,imgSrc));
-        }else if(imgSrc.contains("tweet_video_thumb")){
-            String[] parts=imgSrc.split("/");
-            String lastPart=parts[4];
-            //System.out.println(lastPart);
-            String gifId=lastPart.split("\\.")[0];
-            String gifUrl="https://video.twimg.com/tweet_video/"+gifId+".mp4";
-            media.add(new Media(Media.TYPE.GIF,gifUrl));
-        }else if(imgSrc.contains("ext_tw_video_thumb")){
-            media.add(new Media(Media.TYPE.VIDEO,imgSrc));
+        
+        try {
+            Element mediaDiv = tweetTable.getElementsByClass("media").first();
+            String imgSrc = mediaDiv.child(0).attr("src");
+            if (imgSrc.contains("media")) {
+                media.add(new Media(Media.TYPE.PICTURE, imgSrc));
+            } else if (imgSrc.contains("tweet_video_thumb")) {
+                String[] parts = imgSrc.split("/");
+                String lastPart = parts[4];
+                //System.out.println(lastPart);
+                String gifId = lastPart.split("\\.")[0];
+                String gifUrl = "https://video.twimg.com/tweet_video/" + gifId + ".mp4";
+                media.add(new Media(Media.TYPE.GIF, gifUrl));
+            } else if (imgSrc.contains("ext_tw_video_thumb")) {
+                media.add(new Media(Media.TYPE.VIDEO, imgSrc));
+            }
+        }catch(NullPointerException npe){
+            //media doesn't exists
         }
         return new Tweet(tweetID, authorUsername, tweetText, timestamp, media, mentions, hashtags, urls);
     }
