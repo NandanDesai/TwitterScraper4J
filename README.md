@@ -23,19 +23,37 @@ This is a Java library which lets you fetch Twitter public data without the need
 ## Getting Started
 JAR file is available in the [release](https://github.com/NandanDesai/TwitterScraper4J/releases) section. Download the JAR file, add it to your Java project and start using it!
 
+For Gradle projects, a better way of adding this library as a dependency is,
+
+Add the following in your root `build.gradle`:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+	
+Next, add the dependency:
+    
+    dependencies {
+	        implementation 'com.github.NandanDesai:TwitterScraper4J:v1.2.1-beta'
+	}
+	
+
 #### Code Examples
 
  - *Getting Profile information like name, description, location, number of followers, verified status, profile picture etc.*
 
     ```java
-    TwitterScraper scraper = TwitterScraper.getInstance();  
+    TwitterScraper scraper = TwitterScraper.builder().build();  
     Profile profile = scraper.getProfile("realDonaldTrump");
    ```
 
  - *Getting the user's timeline*
 
     ```java
-    TwitterScraper twitterScraper = TwitterScraper.getInstance();  
+    TwitterScraper twitterScraper = TwitterScraper.builder().build();  
     List<Tweet> tweets=twitterScraper.getUserTimeline("realDonaldTrump");  
       
     for(Tweet tweet:tweets){  
@@ -47,7 +65,7 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
  - *Search a user*
 
     ```java
-    TwitterScraper scraper = TwitterScraper.getInstance();  
+    TwitterScraper scraper = TwitterScraper.builder().build();  
     List<User> users =scraper.searchUser("Narendra Modi");  
     for (User result: users){  
         System.out.println(result);  
@@ -57,14 +75,14 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
  - *Get worldwide trends*
 
     ```java
-    TwitterScraper scraper=TwitterScraper.getInstance();  
+    TwitterScraper scraper=TwitterScraper.builder().build();  
     System.out.println(scraper.getWorldwideTrends());
     ```
  
  - *Get all followers list*
  
      ```java
-     TwitterScraper twitterScraper = TwitterScraper.getInstance();
+     TwitterScraper twitterScraper = TwitterScraper.builder().build();
      Iterator<List<User>> it=twitterScraper.getAllFollowers("realDonaldTrump");
      while(it.hasNext()){
          List<User> users=it.next();
@@ -77,7 +95,7 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
  - *Fetch around 3200 tweets for a given profile*
   
       ```java
-      TwitterScraper twitterScraper = TwitterScraper.getInstance();
+      TwitterScraper twitterScraper = TwitterScraper.builder().build();
       Iterator<List<Tweet>> it=twitterScraper.getAllTweets("realDonaldTrump");
       while(it.hasNext()){
           List<Tweet> tweets=it.next();
@@ -90,7 +108,7 @@ JAR file is available in the [release](https://github.com/NandanDesai/TwitterScr
  - *Get a stream of tweets for a particular keyword or hashtag (EXPERIMENTAL feature)*
   
       ```java
-       TwitterScraper twitterScraper = TwitterScraper.getInstance();
+       TwitterScraper twitterScraper = TwitterScraper.builder().build();
        TweetStream stream=twitterScraper.getTweetStream("Kashmir");
        stream.setStreamListener(new TweetStreamListener() {
            @Override
