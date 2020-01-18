@@ -1,5 +1,8 @@
 # TwitterScraper4J
 
+[![MIT license](https://img.shields.io/github/license/NandanDesai/TwitterScraper4J)](https://github.com/NandanDesai/TwitterScraper4J/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/NandanDesai/TwitterScraper4J?include_prereleases)](https://github.com/NandanDesai/TwitterScraper4J/releases)
+
 This is a Java library which lets you fetch Twitter public data without the need to use any API.
 
 #### Pros
