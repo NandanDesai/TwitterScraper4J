@@ -3,6 +3,12 @@
 [![MIT license](https://img.shields.io/github/license/NandanDesai/TwitterScraper4J)](https://github.com/NandanDesai/TwitterScraper4J/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/NandanDesai/TwitterScraper4J?include_prereleases)](https://github.com/NandanDesai/TwitterScraper4J/releases)
 
+## ! Shutdown Notice !
+
+*Twitter has shutdown it's Legacy version (non-JavaScript website). This library was designed to fetch the content by scraping the non-JavaScript version of the site. Now that the legacy Twitter is shutdown, this library won't work anymore. Refer [this](https://github.com/NandanDesai/TwitterScraper4J/issues/5#issuecomment-801661799) Issue for more info.* 
+
+## Description
+
 This is a Java library which lets you fetch Twitter public data without the need to use any API.
 
 #### Pros
